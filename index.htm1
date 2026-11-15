@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Global Peak Trading</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:Arial;background:#0a0f1e;color:white;text-align:center;padding:40px}
+h1{color:#00ff88} .box{background:#1a2340;padding:25px;border-radius:15px;margin:20px auto;max-width:400px}
+a{display:block;background:#00ff88;color:black;padding:15px;margin:10px;border-radius:10px;text-decoration:none;font-weight:bold}
+</style>
+</head>
+<body>
+<h1>GLOBAL PEAK TRADING</h1>
+<p>Trading Platform with Admin Dashboard</p>
+<div class="box">
+<h2>Welcome</h2>
+<p>Trade Smarter. Grow Faster.</p>
+<a href="#">Get Started</a>
+<a href="#">Login</a>
+<a href="#">Admin Dashboard</a>
+</div>
+<p>© 2026 Global Peak Trading</p>
+</body>
+</html>
