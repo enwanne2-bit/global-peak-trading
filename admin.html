@@ -1,38 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Admin - Global Peak Trading</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Dashboard</title>
 <style>
-body{font-family:Arial;background:#0a0f1e;color:white;text-align:center;padding:20px}
-.box{background:#1a2340;padding:20px;border-radius:10px;max-width:350px;margin:auto}
-input{width:90%;padding:10px;margin:8px;border-radius:5px;border:none}
-button{padding:10px 20px;background:#00ff88;border:none;border-radius:5px;font-weight:bold}
-a{color:#00ff88}
+*{box-sizing:border-box}
+body{font-family:Arial;background:#0a0f1e;color:#fff;padding:15px;margin:0}
+h1{text-align:center;color:#00ff88}
+.box{background:#1a2340;padding:20px;border-radius:12px;max-width:380px;margin:40px auto;text-align:center}
+.box input{width:100%;padding:12px;margin:8px 0;border-radius:8px;border:none;font-size:15px}
+.box button{width:100%;padding:12px;background:#00ff88;border:none;border-radius:8px;font-weight:bold;font-size:16px}
+.cards{display:flex;gap:10px;flex-wrap:wrap}
+.card{background:#1a2340;padding:15px;border-radius:10px;flex:1;min-width:140px;text-align:center}
+.card b{font-size:22px;color:#00ff88;display:block;margin-top:5px}
+table{width:100%;background:#1a2340;border-radius:10px;border-collapse:collapse;margin-top:15px;font-size:13px}
+th,td{padding:10px;border-bottom:1px solid #333;text-align:left}
+input.small{width:75px;padding:6px;border-radius:5px;border:none}
+button.small{padding:7px 10px;background:#00ff88;border:none;border-radius:5px;font-weight:bold;cursor:pointer}
+button.red{background:#ff4444;color:#fff}
+button.blue{background:#0088ff;color:#fff}
+.top{display:flex;justify-content:space-between;align-items:center}
 </style>
 </head>
 <body>
+<div id="loginBox">
 <h1>ADMIN LOGIN</h1>
 <div class="box">
-<p>Global Peak Trading Admin</p>
-<input type="text" id="user" placeholder="Username">
-<input type="password" id="pass" placeholder="Password">
-<br><br>
-<button onclick="login()">Login</button>
-<p id="msg"></p>
+<p>Global Peak Trading - Admin Only</p>
+<input type="text" id="adminUser" placeholder="Username">
+<input type="password" id="adminPass" placeholder="Password">
+<button type="button" onclick="doLogin()">LOGIN</button>
+<p id="loginMsg" style="color:#ff7777"></p>
+<p style="font-size:12px;color:#aaa">Username: admin<br>Password: admin123</p>
 </div>
-<br>
-<a href="index.html">← Back to Home</a>
+</div>
+<div id="dashBox" style="display:none">
+<div class="top"><h2>📊 Admin Dashboard</h2><button type="button" class="small red" onclick="doLogout()">Logout</button></div>
+<p>Welcome Admin</p>
+<div class="cards">
+<div class="card">Total Users<b id="cUsers">0</b></div>
+<div class="card">Total Deposits<b id="cDep">$0</b></div>
+<div class="card">Pending Withdrawals<b id="cPend">0</b></div>
+<div class="card">Total Orders<b id="cOrders">0</b></div>
+</div>
+<h3>👥 Users - Edit Balance</h3>
+<button type="button" class="small blue" onclick="addUser()">+ Add User</button>
+<table><tr><th>Name</th><th>Email</th><th>Balance</th><th>Action</th></tr><tbody id="usersBody"></tbody></table>
+<h3>💰 Deposits</h3>
+<table><tr><th>User</th><th>Amount</th><th>Status</th></tr><tbody id="depBody"></tbody></table>
+<h3>🏦 Withdrawals</h3>
+<table><tr><th>User</th><th>Amount</th><th>Status</th><th>Action</th></tr><tbody id="withBody"></tbody></table>
+<h3>📈 Orders</h3>
+<table><tr><th>User</th><th>Pair</th><th>Amount</th><th>Type</th></tr><tbody id="orderBody"></tbody></table>
+<br><a href="index.html" style="color:#00ff88">← Back to Home</a>
+</div>
 <script>
-function login(){
-var u=document.getElementById('user').value;
-var p=document.getElementById('pass').value;
-if(u=="admin" && p=="admin123"){
-document.getElementById('msg').innerHTML="Welcome Admin! Dashboard coming soon.";
-}else{
-document.getElementById('msg').innerHTML="Wrong username or password";
-}
-}
+var users=[{name:"John Doe",email:"john@gmail.com",balance:1250},{name:"Mary Okafor",email:"mary@gmail.com",balance:850},{name:"Emeka Eze",email:"emeka@gmail.com",balance:2100}];
+var deposits=[{user:"John Doe",amount:1000,status:"Approved"},{user:"Mary Okafor",amount:500,status:"Approved"},{user:"Emeka Eze",amount:2000,status:"Pending"}];
+var withdraws=[{user:"John Doe",amount:300,status:"Pending"},{user:"Mary Okafor",amount:200,status:"Approved"}];
+var orders=[{user:"John Doe",pair:"BTC/USD",amount:500,type:"BUY"},{user:"Emeka Eze",pair:"ETH/USD",amount:1000,type:"SELL"},{user:"Mary Okafor",pair:"EUR/USD",amount:250,type:"BUY"}];
+function doLogin(){var u=document.getElementById("adminUser").value.trim();var p=document.getElementById("adminPass").value.trim();if(u==="admin"&&p==="admin123"){document.getElementById("loginBox").style.display="none";document.getElementById("dashBox").style.display="block";showAll();}else{document.getElementById("loginMsg").innerHTML="Wrong username or password. Try admin / admin123";}}
+function doLogout(){document.getElementById("dashBox").style.display="none";document.getElementById("loginBox").style.display="block";document.getElementById("adminUser").value="";document.getElementById("adminPass").value="";}
+function showAll(){document.getElementById("cUsers").innerHTML=users.length;var td=0;for(var i=0;i<deposits.length;i++){td=td+deposits[i].amount;}document.getElementById("cDep").innerHTML="$"+td;var pend=0;for(var j=0;j<withdraws.length;j++){if(withdraws[j].status==="Pending")pend++;}document.getElementById("cPend").innerHTML=pend;document.getElementById("cOrders").innerHTML=orders.length;var uh="";for(var k=0;k<users.length;k++){uh+="<tr><td>"+users[k].name+"</td><td>"+users[k].email+"</td><td><input class='small' id='bal"+k+"' value='"+users[k].balance+"'></td><td><button class='small' onclick='saveBal("+k+")'>Save</button> <button class='small red' onclick='delUser("+k+")'>Del</button></td></tr>";}document.getElementById("usersBody").innerHTML=uh;var dh="";for(var d=0;d<deposits.length;d++){dh+="<tr><td>"+deposits[d].user+"</td><td>$"+deposits[d].amount+"</td><td>"+deposits[d].status+"</td></tr>";}document.getElementById("depBody").innerHTML=dh;var wh="";for(var w=0;w<withdraws.length;w++){var btn="";if(withdraws[w].status==="Pending"){btn="<button class='small' onclick='approveW("+w+")'>Approve</button> <button class='small red' onclick='rejectW("+w+")'>Reject</button>";}else{btn="-";}wh+="<tr><td>"+withdraws[w].user+"</td><td>$"+withdraws[w].amount+"</td><td>"+withdraws[w].status+"</td><td>"+btn+"</td></tr>";}document.getElementById("withBody").innerHTML=wh;var oh="";for(var o=0;o<orders.length;o++){oh+="<tr><td>"+orders[o].user+"</td><td>"+orders[o].pair+"</td><td>$"+orders[o].amount+"</td><td>"+orders[o].type+"</td></tr>";}document.getElementById("orderBody").innerHTML=oh;}
+function saveBal(i){var v=document.getElementById("bal"+i).value;users[i].balance=parseFloat(v)||0;alert("Balance updated for "+users[i].name+" to $"+users[i].balance);showAll();}
+function delUser(i){if(confirm("Delete "+users[i].name+"?")){users.splice(i,1);showAll();}}
+function addUser(){var n=prompt("User name?");var e=prompt("Email?");var b=prompt("Balance?");if(n){users.push({name:n,email:e,balance:parseFloat(b)||0});showAll();}}
+function approveW(i){withdraws[i].status="Approved";showAll();}
+function rejectW(i){withdraws[i].status="Rejected";showAll();}
 </script>
 </body>
-                                 </html>
+  </html>
